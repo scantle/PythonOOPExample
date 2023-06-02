@@ -8,6 +8,7 @@ import numpy as np
 # -------------------------------------------------------------------------------------------------------------------- #
 
 class Point(object):
+    """ Point class with attributes x, y, and value"""
     def __init__(self, x, y, value=None):
         """ Initiate Object, assign values to object attributes"""
         self.x = x
@@ -15,9 +16,11 @@ class Point(object):
         self.v = value
 
     def distance(self, other):
+        """ Distance between this instance and another Point instance"""
         return ((self.x - other.x) ** 2 + (self.y - other.y) ** 2) ** 0.5
 
     def __sub__(self, other):
+        """ Subtracting Points returns their distance. Works with iterables as well!"""
         if type(other) is Point:
             return self.distance(other)
         elif hasattr(other, '__iter__'):
@@ -38,7 +41,7 @@ class Interpolate(object):
         return 1/((p1-p2)**n)
 
     # Private method! Can't be seen by the user
-    def _idw(self, p: Point, n: float=2):
+    def _idw(self, p: Point, n: float = 2.0):
         """ Inverse Distance weighted interpolation to point (px, py)
         :param p: Interpolation point
         :param n: Power value (usually 2)
@@ -48,10 +51,17 @@ class Interpolate(object):
         values = [item.v for item in self.data]
         return np.dot(weights, values)/weights.sum()
 
-    def calc(self, p: Point, method="IDW"):
+    def calc(self, p: Point, method: str = "IDW"):
+        """ Perform interpolation to point p
+        :param p: Point to interpolate too
+        :param method: Method to use in interpolation ("IDW" or "NN")
+        :return: float of interpolated value
+        """
         match method:
             case "IDW":
                 ans = self._idw(p)
+            case "NN":
+                ans = self.data[np.argmin(p - self.data)].v
             case _:
                 raise ValueError("That ain't right.")
         return ans

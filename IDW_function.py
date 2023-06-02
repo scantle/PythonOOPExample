@@ -19,8 +19,7 @@ def calc_weight(x1, x2, y1, y2, n):
     return 1/(dist(x1, x2, y1, y2)**n)
 
 def idw(px: float, py: float, vxs: list, vys: list, values: list, n: float=2):
-    """
-    Inverse Distance weighted interpolation to point (px, py)
+    """ Inverse Distance weighted interpolation to point (px, py)
     :param px: Interpolation point x value
     :param py: Interpolation point y value
     :param vxs: Data x values

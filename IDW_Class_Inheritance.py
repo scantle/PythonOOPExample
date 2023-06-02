@@ -1,5 +1,5 @@
 """
-Example of Inverse Distance Weighting (IDW) as part of a class
+Example of Inverse Distance Weighting (IDW) as a class with inheritance
 """
 import numpy as np
 
@@ -32,11 +32,15 @@ class Interpolate(object):
         self.data = data
 
     def _calc_method(self, p):
-        """ Default: closest value"""
+        """ Default: nearest neighbor"""
         imin = np.argmin(p - self.data)
         return self.data[imin].v
 
     def calc(self, p: Point):
+        """ Perform interpolation to point p
+        :param p: Interpolation point
+        :return: interpolated value at point p
+        """
         return self._calc_method(p)
 
 # -------------------------------------------------------------------------------------------------------------------- #
@@ -57,7 +61,7 @@ class IDW(Interpolate):
         """ Inverse Distance weighted interpolation to point (px, py)
         :param p: Interpolation point
         :param n: Power value (usually 2)
-        :return: interpolated value at point (px, py)
+        :return: interpolated value at point p
         """
         weights = self._calc_weight(p, self.data, self.n)
         values = [item.v for item in self.data]
