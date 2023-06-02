@@ -36,6 +36,11 @@ class Interpolate(object):
         imin = np.argmin(p - self.data)
         return self.data[imin].v
 
+    # Example of a property
+    @property
+    def n(self):
+        return len(self.data)
+
     def calc(self, p: Point):
         """ Perform interpolation to point p
         :param p: Interpolation point
@@ -46,24 +51,24 @@ class Interpolate(object):
 # -------------------------------------------------------------------------------------------------------------------- #
 
 class IDW(Interpolate):
-    def __init__(self, data: list, n=2):
+    def __init__(self, data: list, power=2):
         super().__init__(data)
-        self.n = 2
+        self.power = power
 
     # Static method! Doesn't rely on anything in the object
     @staticmethod
-    def _calc_weight(p1: Point, p2: Point, n: float):
-        """ Calculate inverse distance weight given (x1,y1) and (x2,y2) and power value n"""
-        return 1/((p1-p2)**n)
+    def _calc_weight(p1: Point, p2: Point, power: float):
+        """ Calculate inverse distance weight given (x1,y1) and (x2,y2) and power value"""
+        return 1/((p1-p2)**power)
 
     # OVERRIDE BASE CLASS METHOD!!
     def _calc_method(self, p: Point):
         """ Inverse Distance weighted interpolation to point (px, py)
         :param p: Interpolation point
-        :param n: Power value (usually 2)
+        :param power: Power value (usually 2)
         :return: interpolated value at point p
         """
-        weights = self._calc_weight(p, self.data, self.n)
+        weights = self._calc_weight(p, self.data, self.power)
         values = [item.v for item in self.data]
         return np.dot(weights, values)/weights.sum()
 
@@ -82,5 +87,10 @@ p = Point(x=5.5, y=5.5)
 interp = Interpolate(points)
 interp.calc(p=p)
 
+# Property example
+interp.n
+
+# IDW
 interp = IDW(points)
+interp.n
 interp.calc(p=p)

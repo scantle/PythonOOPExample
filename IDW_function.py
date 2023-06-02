@@ -14,21 +14,21 @@ def dist(x1, x2, y1, y2):
     """ Calculate distance between points (x1,y1) and (x2,y2)"""
     return ((x1-x2)**2 + (y1-y2)**2)**0.5
 
-def calc_weight(x1, x2, y1, y2, n):
-    """ Calculate inverse distance weight given (x1,y1) and (x2,y2) and power value n"""
-    return 1/(dist(x1, x2, y1, y2)**n)
+def calc_weight(x1, x2, y1, y2, power):
+    """ Calculate inverse distance weight given (x1,y1) and (x2,y2) and power value power"""
+    return 1/(dist(x1, x2, y1, y2)**power)
 
-def idw(px: float, py: float, vxs: list, vys: list, values: list, n: float=2):
+def idw(px: float, py: float, vxs: list, vys: list, values: list, power: float=2):
     """ Inverse Distance weighted interpolation to point (px, py)
     :param px: Interpolation point x value
     :param py: Interpolation point y value
     :param vxs: Data x values
     :param vys: Data y values
     :param values: Data values at points (vxs, vys)
-    :param n: Power value (usually 2)
+    :param power: Power value (usually 2)
     :return: interpolated value at point (px, py)
     """
-    weights = calc_weight(px, vxs, py, vys, n)
+    weights = calc_weight(px, vxs, py, vys, power)
     return np.dot(weights, values)/weights.sum()
 
 # -------------------------------------------------------------------------------------------------------------------- #

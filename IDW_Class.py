@@ -36,22 +36,22 @@ class Interpolate(object):
 
     # Static method! Doesn't rely on anything in the object
     @staticmethod
-    def _calc_weight(p1: Point, p2: Point, n: float):
-        """ Calculate inverse distance weight given (x1,y1) and (x2,y2) and power value n"""
-        return 1/((p1-p2)**n)
+    def _calc_weight(p1: Point, p2: [Point], power: float):
+        """ Calculate inverse distance weight given (x1,y1) and (x2,y2) and power value power"""
+        return 1/((p1-p2) ** power)
 
     # Private method! Can't be seen by the user
-    def _idw(self, p: Point, n: float = 2.0):
+    def _idw(self, p: Point, power: float = 2.0):
         """ Inverse Distance weighted interpolation to point (px, py)
         :param p: Interpolation point
         :param n: Power value (usually 2)
         :return: interpolated value at point (px, py)
         """
-        weights = self._calc_weight(p, self.data, n)
+        weights = self._calc_weight(p, self.data, power)
         values = [item.v for item in self.data]
         return np.dot(weights, values)/weights.sum()
 
-    def calc(self, p: Point, method: str = "IDW"):
+    def calc(self, p: Point, method: str = "IDW", ):
         """ Perform interpolation to point p
         :param p: Point to interpolate too
         :param method: Method to use in interpolation ("IDW" or "NN")
